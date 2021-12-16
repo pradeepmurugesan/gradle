@@ -89,8 +89,9 @@ class DefaultConfigurationCacheProblemsListener internal constructor(
             ?: PropertyTrace.Task(GeneratedSubclasses.unpackType(task), task.identityPath.path)
 
     override fun onBuildScopeListenerRegistration(listener: Any, invocationDescription: String, invocationSource: Any) {
-        if (listener is InternalListener || listener is ProjectEvaluationListener || isBuildSrcBuild(invocationSource))
+        if (listener is InternalListener || listener is ProjectEvaluationListener || isBuildSrcBuild(invocationSource)) {
             return
+        }
         problems.onProblem(
             listenerRegistrationProblem(
                 userCodeApplicationContext.location(null),
