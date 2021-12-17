@@ -64,7 +64,6 @@ import org.gradle.api.tasks.TaskLocalState;
 import org.gradle.configuration.internal.UserCodeApplicationContext;
 import org.gradle.internal.Cast;
 import org.gradle.internal.Factory;
-import org.gradle.internal.deprecation.DeprecationLogger;
 import org.gradle.internal.event.ListenerManager;
 import org.gradle.internal.execution.history.changes.InputChangesInternal;
 import org.gradle.internal.extensibility.ExtensibleDynamicObject;
@@ -1050,7 +1049,7 @@ public abstract class AbstractTask implements TaskInternal, DynamicObjectAware {
 
     private void notifyProjectAccess() {
         if (state.getExecuting()) {
-            DeprecationLogger.deprecateAction("Invocation of task.project at execution time").willBecomeAnErrorInGradle8().withUpgradeGuideSection(7, "task_project_at_execution_time").nagUser();
+//            DeprecationLogger.deprecateAction("Invocation of task.project at execution time").willBecomeAnErrorInGradle8().withUpgradeGuideSection(7, "task_project_at_execution_time").nagUser();
             getTaskExecutionAccessBroadcaster().onProjectAccess("Task.project", this);
         }
     }
