@@ -35,6 +35,7 @@ import java.io.File;
 @Incubating
 @DisableCachingByDefault(because = "Not made cacheable, yet")
 public class GenerateFiltersFileTask extends XmlGeneratorTask<VisualStudioFiltersFile> {
+    private final File rootDir = getProject().getRootDir();
     private DefaultVisualStudioProject visualStudioProject;
 
     @Override
@@ -80,6 +81,6 @@ public class GenerateFiltersFileTask extends XmlGeneratorTask<VisualStudioFilter
 
     @Override
     protected VisualStudioFiltersFile create() {
-        return new VisualStudioFiltersFile(getXmlTransformer(), RelativeFileNameTransformer.forFile(getProject().getRootDir(), visualStudioProject.getFiltersFile().getLocation()));
+        return new VisualStudioFiltersFile(getXmlTransformer(), RelativeFileNameTransformer.forFile(rootDir, visualStudioProject.getFiltersFile().getLocation()));
     }
 }

@@ -44,6 +44,8 @@ import java.util.concurrent.Callable;
 @Incubating
 @DisableCachingByDefault(because = "Not made cacheable, yet")
 public class GenerateProjectFileTask extends XmlGeneratorTask<VisualStudioProjectFile> {
+    private final File rootDir = getProject().getRootDir();
+    private final String path = getProject().getPath();
     private DefaultVisualStudioProject visualStudioProject;
     private String gradleExe;
     private String gradleArgs;
@@ -58,7 +60,7 @@ public class GenerateProjectFileTask extends XmlGeneratorTask<VisualStudioProjec
         getConventionMapping().map("gradleExe", new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                final String rootDir = getTransformer().transform(getProject().getRootDir());
+                final String rootDir = getTransformer().transform(GenerateProjectFileTask.this.rootDir);
                 String args = "";
                 if (!rootDir.equals(".")) {
                     args = " -p \"" + rootDir + "\"";
@@ -75,7 +77,7 @@ public class GenerateProjectFileTask extends XmlGeneratorTask<VisualStudioProjec
 
     @Internal
     public Transformer<String, File> getTransformer() {
-        return RelativeFileNameTransformer.forFile(getProject().getRootDir(), visualStudioProject.getProjectFile().getLocation());
+        return RelativeFileNameTransformer.forFile(rootDir, visualStudioProject.getProjectFile().getLocation());
     }
 
     public void setVisualStudioProject(VisualStudioProject vsProject) {
@@ -125,7 +127,7 @@ public class GenerateProjectFileTask extends XmlGeneratorTask<VisualStudioProjec
         }
 
         if (vsProject.getConfigurations().stream().noneMatch(it -> it.isBuildable())) {
-            getLogger().warn("'" + vsProject.getComponentName() + "' component in project '" + getProject().getPath() + "' is not buildable.");
+            getLogger().warn("'" + vsProject.getComponentName() + "' component in project '" + path + "' is not buildable.");
         }
         for (VisualStudioProjectConfiguration configuration : vsProject.getConfigurations()) {
             projectFile.addConfiguration(configuration);
@@ -144,7 +146,6 @@ public class GenerateProjectFileTask extends XmlGeneratorTask<VisualStudioProjec
         } else {
             return exe + " " + args.trim();
         }
-
     }
 
     @Input
